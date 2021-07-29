@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="text_size">20sp</dimen>
+    <dimen name="list_height">200dp</dimen>
+    <dimen name="header_text_size">26sp</dimen>
+    <dimen name="space">16dp</dimen>
+    <dimen name="film_name_header_text_size">30sp</dimen>
+    <dimen name="little_space">10dp</dimen>
+    <dimen name="card_radius">10dp</dimen>
+    <dimen name="card_margin">4dp</dimen>
+    <dimen name="card_elevation">20dp</dimen>
+</resources>

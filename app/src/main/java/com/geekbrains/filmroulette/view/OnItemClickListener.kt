@@ -1,7 +1,7 @@
 package com.geekbrains.filmroulette.view
 
-import android.view.View
+import com.geekbrains.filmroulette.model.Film
 
 interface OnItemClickListener {
-    fun onClick(view: View, position: Int)
+    fun onClick(film: Film)
 }

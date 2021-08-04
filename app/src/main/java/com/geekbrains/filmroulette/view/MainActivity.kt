@@ -9,7 +9,7 @@ import com.geekbrains.filmroulette.R
 import com.geekbrains.filmroulette.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
-    lateinit var ui: ActivityMainBinding
+    private lateinit var ui: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

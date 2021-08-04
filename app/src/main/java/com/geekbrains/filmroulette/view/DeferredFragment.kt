@@ -4,6 +4,6 @@ import androidx.fragment.app.Fragment
 
 class DeferredFragment : Fragment() {
     companion object {
-        fun newInstance(): Fragment = DeferredFragment()
+        fun newInstance() = DeferredFragment()
     }
 }

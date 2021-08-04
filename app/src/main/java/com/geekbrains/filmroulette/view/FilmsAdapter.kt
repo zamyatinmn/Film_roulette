@@ -9,10 +9,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.geekbrains.filmroulette.R
 import com.geekbrains.filmroulette.model.Film
 
-class FilmsAdapter() : RecyclerView.Adapter<BaseViewHolder>() {
+class FilmsAdapter : RecyclerView.Adapter<BaseViewHolder>() {
 
     lateinit var itemClickListener: OnItemClickListener
-    private var filmData: MutableList<Film> = mutableListOf(Film())
+    private var filmData = mutableListOf(Film())
     fun setFilmData(data: MutableList<Film>) {
         filmData = data
         notifyDataSetChanged()
@@ -31,16 +31,16 @@ class FilmsAdapter() : RecyclerView.Adapter<BaseViewHolder>() {
         holder.setData(filmData[position])
     }
 
-    override fun getItemCount(): Int {
-        return filmData.size
-    }
+    override fun getItemCount() = filmData.size
 }
 
 class BaseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     fun setData(film: Film) {
-        itemView.findViewById<TextView>(R.id.film_title).text = film.name
-        itemView.findViewById<TextView>(R.id.film_date).text = film.date.toString()
-        itemView.findViewById<TextView>(R.id.film_rating).text = film.rate.toString()
+        itemView.apply {
+            findViewById<TextView>(R.id.film_title).text = film.name
+            findViewById<TextView>(R.id.film_date).text = film.date.toString()
+            findViewById<TextView>(R.id.film_rating).text = film.rate.toString()
+        }
         val like = itemView.findViewById<ImageView>(R.id.film_like)
         setLike(film, like)
         like.setOnClickListener {
@@ -51,10 +51,7 @@ class BaseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     }
 
     private fun setLike(film: Film, like: ImageView) {
-        if (film.like) {
-            like.setImageResource(R.drawable.ic_filled_like)
-        } else {
-            like.setImageResource(R.drawable.ic_like)
-        }
+        if (film.like) like.setImageResource(R.drawable.ic_filled_like)
+        else like.setImageResource(R.drawable.ic_like)
     }
 }

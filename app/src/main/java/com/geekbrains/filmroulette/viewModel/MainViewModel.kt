@@ -4,7 +4,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.geekbrains.filmroulette.model.IRepository
 import com.geekbrains.filmroulette.model.Repository
-import java.util.*
 
 class MainViewModel(
     private val liveDataObserver: MutableLiveData<AppState> = MutableLiveData(),
@@ -16,15 +15,13 @@ class MainViewModel(
 
     //temporary plug
     private fun getDataFromLocal() {
-        val rand = Random()
-        when (rand.nextInt(4)) {
+        when (1) {
             0 -> liveDataObserver.value = AppState.Loading
-            1 -> liveDataObserver.value = AppState.Success(
-                repository.getNovelty(),
-                repository.getPopular(),
-                repository.getThriller(),
-                repository.getComedy()
-            )
+            1 -> repository.apply {
+                liveDataObserver.value = AppState.Success(
+                    getNovelty(), getPopular(), getThriller(), getComedy()
+                )
+            }
             2 -> liveDataObserver.value =
                 AppState.ServerError(Throwable("something wrong with server"))
             3 -> liveDataObserver.value =

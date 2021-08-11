@@ -5,9 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.geekbrains.filmroulette.POSTER_PREFIX
 import com.geekbrains.filmroulette.R
 import com.geekbrains.filmroulette.databinding.FragmentCurrentFilmBinding
-import com.geekbrains.filmroulette.model.Film
+import com.geekbrains.filmroulette.model.CurrentMovie
+import com.squareup.picasso.Picasso
 
 class CurrentFilmFragment : Fragment() {
     private lateinit var ui: FragmentCurrentFilmBinding
@@ -23,7 +25,7 @@ class CurrentFilmFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         ui = FragmentCurrentFilmBinding.inflate(inflater, container, false)
-        val film: Film? = arguments?.getParcelable(KEY_FILM)
+        val film: CurrentMovie? = arguments?.getParcelable(KEY_FILM)
         film?.let {
             setData(film)
             ui.filmLike.setOnClickListener {
@@ -35,11 +37,27 @@ class CurrentFilmFragment : Fragment() {
         return ui.root
     }
 
-    private fun setData(film: Film) {
+    private fun setData(film: CurrentMovie) {
         ui.apply {
-            name.text = film.name
-            date.text = film.date.toString()
-            filmRating.text = film.rate.toString()
+            name.text = film.title
+            date.text = film.release_date
+            filmRating.text = film.vote_average.toString()
+            description.text = film.overview
+            originalName.text = film.original_title
+            val tempBudget = "${getString(R.string.budget)} ${film.budget}$"
+            budget.text = tempBudget
+            val tempRevenue = "${getString(R.string.revenue)} ${film.revenue}$"
+            revenue.text = tempRevenue
+            val tempDuration = "${film.runtime} ${getString(R.string.minutes)}"
+            duration.text = tempDuration
+            val tempGenre = StringBuilder("")
+            for (genre in film.genres) {
+                tempGenre.append("${genre.name} ")
+            }
+            genres.text = tempGenre
+            Picasso.get()
+                .load("$POSTER_PREFIX${film.poster_path}")
+                .into(poster)
 
             if (film.like) filmLike.setImageResource(R.drawable.ic_filled_like)
             else filmLike.setImageResource(R.drawable.ic_like)

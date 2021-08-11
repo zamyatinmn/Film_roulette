@@ -2,16 +2,17 @@ package com.geekbrains.filmroulette.viewModel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.geekbrains.filmroulette.model.ApiRepository
 import com.geekbrains.filmroulette.model.IRepository
-import com.geekbrains.filmroulette.model.Repository
 
 class MainViewModel(
     private val liveDataObserver: MutableLiveData<AppState> = MutableLiveData(),
-    private val repository: IRepository = Repository()
+    private val repository: IRepository = ApiRepository()
 ) : ViewModel() {
     fun getLiveData() = liveDataObserver
 
     fun getFilmData() = getDataFromLocal()
+    fun getFilm(id: Long) = repository.getFilmFromServer(id)
 
     //temporary plug
     private fun getDataFromLocal() {

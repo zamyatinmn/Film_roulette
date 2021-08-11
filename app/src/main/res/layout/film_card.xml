@@ -35,7 +35,8 @@
 
         <TextView
             android:id="@+id/film_title"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
+            android:singleLine="true"
             android:layout_height="wrap_content"
             android:text="film title"
             android:textSize="@dimen/text_size"

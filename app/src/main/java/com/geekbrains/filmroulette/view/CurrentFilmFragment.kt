@@ -14,11 +14,7 @@ class CurrentFilmFragment : Fragment() {
 
     companion object {
         const val KEY_FILM = "KEY_FILM"
-        fun newInstance(bundle: Bundle): Fragment {
-            val fragment = CurrentFilmFragment()
-            fragment.arguments = bundle
-            return fragment
-        }
+        fun newInstance(bundle: Bundle) = CurrentFilmFragment().apply { arguments = bundle }
     }
 
     override fun onCreateView(
@@ -27,27 +23,26 @@ class CurrentFilmFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         ui = FragmentCurrentFilmBinding.inflate(inflater, container, false)
-        val film: Film = arguments?.getParcelable(KEY_FILM)!!
-        setData(film)
-        ui.filmLike.setOnClickListener {
-            film.like = !film.like
-            if (film.like) {
-                ui.filmLike.setImageResource(R.drawable.ic_filled_like)
-            } else {
-                ui.filmLike.setImageResource(R.drawable.ic_like)
+        val film: Film? = arguments?.getParcelable(KEY_FILM)
+        film?.let {
+            setData(film)
+            ui.filmLike.setOnClickListener {
+                film.like = !film.like
+                if (film.like) ui.filmLike.setImageResource(R.drawable.ic_filled_like)
+                else ui.filmLike.setImageResource(R.drawable.ic_like)
             }
         }
         return ui.root
     }
 
     private fun setData(film: Film) {
-        ui.name.text = film.name
-        ui.date.text = film.date.toString()
-        ui.filmRating.text = film.rate.toString()
-        if (film.like) {
-            ui.filmLike.setImageResource(R.drawable.ic_filled_like)
-        } else {
-            ui.filmLike.setImageResource(R.drawable.ic_like)
+        ui.apply {
+            name.text = film.name
+            date.text = film.date.toString()
+            filmRating.text = film.rate.toString()
+
+            if (film.like) filmLike.setImageResource(R.drawable.ic_filled_like)
+            else filmLike.setImageResource(R.drawable.ic_like)
         }
     }
 }

@@ -12,7 +12,11 @@ import com.geekbrains.filmroulette.model.Film
 class FilmsAdapter() : RecyclerView.Adapter<BaseViewHolder>() {
 
     lateinit var itemClickListener: OnItemClickListener
-    lateinit var holder: BaseViewHolder
+    private var filmData: MutableList<Film> = mutableListOf(Film())
+    fun setFilmData(data: MutableList<Film>) {
+        filmData = data
+        notifyDataSetChanged()
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder {
         val v = LayoutInflater.from(parent.context)
@@ -22,17 +26,13 @@ class FilmsAdapter() : RecyclerView.Adapter<BaseViewHolder>() {
 
     override fun onBindViewHolder(holder: BaseViewHolder, position: Int) {
         holder.itemView.setOnClickListener {
-            itemClickListener.onClick(holder.itemView, position)
+            itemClickListener.onClick(filmData[position])
         }
-        this.holder = holder
-    }
-
-    fun setData(film: Film) {
-        holder.setData(film)
+        holder.setData(filmData[position])
     }
 
     override fun getItemCount(): Int {
-        return 20
+        return filmData.size
     }
 }
 
@@ -41,12 +41,20 @@ class BaseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         itemView.findViewById<TextView>(R.id.film_title).text = film.name
         itemView.findViewById<TextView>(R.id.film_date).text = film.date.toString()
         itemView.findViewById<TextView>(R.id.film_rating).text = film.rate.toString()
-        itemView.findViewById<ImageView>(R.id.film_date).setImageResource(R.drawable.ic_launcher_background)
-//        itemView.findViewById<ImageView>(R.id.film_date).setImageDrawable(film.poster)
-        if (film.like){
-            itemView.findViewById<ImageView>(R.id.film_like).setImageResource(R.drawable.ic_like)
+        val like = itemView.findViewById<ImageView>(R.id.film_like)
+        setLike(film, like)
+        like.setOnClickListener {
+            film.like = !film.like
+            setLike(film, like)
+        }
+
+    }
+
+    private fun setLike(film: Film, like: ImageView) {
+        if (film.like) {
+            like.setImageResource(R.drawable.ic_filled_like)
         } else {
-            itemView.findViewById<ImageView>(R.id.film_like).setImageResource(R.drawable.ic_filled_like)
+            like.setImageResource(R.drawable.ic_like)
         }
     }
 }

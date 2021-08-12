@@ -17,12 +17,16 @@ import com.geekbrains.filmroulette.viewModel.AppState
 import com.geekbrains.filmroulette.viewModel.MainViewModel
 
 class MainFragment : Fragment() {
-    private lateinit var ui: FragmentMainBinding
-    private lateinit var viewModel: MainViewModel
-    private lateinit var noveltyAdapter: FilmsAdapter
-    private lateinit var popularAdapter: FilmsAdapter
-    private lateinit var thrillerAdapter: FilmsAdapter
-    private lateinit var comedyAdapter: FilmsAdapter
+
+    private var _ui: FragmentMainBinding? = null
+    private val ui get() = _ui!!
+    private val viewModel: MainViewModel by lazy {
+        ViewModelProvider(this).get(MainViewModel::class.java)
+    }
+    private var noveltyAdapter: FilmsAdapter = FilmsAdapter()
+    private var popularAdapter: FilmsAdapter = FilmsAdapter()
+    private var thrillerAdapter: FilmsAdapter = FilmsAdapter()
+    private var comedyAdapter: FilmsAdapter = FilmsAdapter()
 
     companion object {
         fun newInstance(): Fragment = MainFragment()
@@ -33,17 +37,31 @@ class MainFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        ui = FragmentMainBinding.inflate(inflater)
-        initNoveltyRecyclerView(ui.noveltyRecyclerView)
-        initPopularRecyclerView(ui.popularRecyclerView)
-        initThrillerRecyclerView(ui.thrillerRecyclerView)
-        initComedyRecyclerView(ui.comedyRecyclerView)
+        _ui = FragmentMainBinding.inflate(inflater)
+
+        ui.apply {
+            initRecyclerView(noveltyRecyclerView, noveltyAdapter)
+            initRecyclerView(popularRecyclerView, popularAdapter)
+            initRecyclerView(thrillerRecyclerView, thrillerAdapter)
+            initRecyclerView(comedyRecyclerView, comedyAdapter)
+        }
+
         setRefreshBehaviour()
         return ui.root
     }
 
+    private fun initRecyclerView(recyclerView: RecyclerView, adapter: FilmsAdapter) {
+        recyclerView.setHasFixedSize(true)
+        setHasOptionsMenu(true)
+        val layoutManager = LinearLayoutManager(
+            requireContext(), LinearLayoutManager.HORIZONTAL, false
+        )
+        recyclerView.layoutManager = layoutManager
+        adapter.itemClickListener = onFilmClickListener()
+        recyclerView.adapter = adapter
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
         viewModel.getLiveData().observe(viewLifecycleOwner, { renderData(it) })
         viewModel.getFilmData()
         super.onViewCreated(view, savedInstanceState)
@@ -52,22 +70,21 @@ class MainFragment : Fragment() {
     private fun renderData(state: AppState) {
         when (state) {
             is AppState.Success -> {
-                ui.loading.visibility = View.GONE
+                ui.loading.gone()
                 noveltyAdapter.setFilmData(state.novelty)
                 popularAdapter.setFilmData(state.popular)
                 thrillerAdapter.setFilmData(state.thriller)
                 comedyAdapter.setFilmData(state.comedy)
             }
-            is AppState.Loading -> ui.loading.visibility = View.VISIBLE
-            is AppState.LocalError -> {
-                ui.loading.visibility = View.GONE
-                Toast.makeText(context, state.javaClass.simpleName, Toast.LENGTH_LONG).show()
-            }
-            is AppState.ServerError -> {
-                ui.loading.visibility = View.GONE
-                Toast.makeText(context, state.javaClass.simpleName, Toast.LENGTH_LONG).show()
-            }
+            is AppState.Loading -> ui.loading.visible()
+            is AppState.LocalError -> showError(state)
+            is AppState.ServerError -> showError(state)
         }
+    }
+
+    private fun showError(state: AppState) {
+        ui.loading.gone()
+        Toast.makeText(context, state.javaClass.simpleName, Toast.LENGTH_LONG).show()
     }
 
     private fun setRefreshBehaviour() {
@@ -77,49 +94,17 @@ class MainFragment : Fragment() {
         }
     }
 
-    private fun initNoveltyRecyclerView(recyclerView: RecyclerView) {
-        prepareRecycler(recyclerView)
-        noveltyAdapter = FilmsAdapter()
-        noveltyAdapter.itemClickListener = onFilmClickListener()
-        recyclerView.adapter = noveltyAdapter
-    }
-
-    private fun initPopularRecyclerView(recyclerView: RecyclerView) {
-        prepareRecycler(recyclerView)
-        popularAdapter = FilmsAdapter()
-        popularAdapter.itemClickListener = onFilmClickListener()
-        recyclerView.adapter = popularAdapter
-    }
-
-    private fun initThrillerRecyclerView(recyclerView: RecyclerView) {
-        prepareRecycler(recyclerView)
-        thrillerAdapter = FilmsAdapter()
-        thrillerAdapter.itemClickListener = onFilmClickListener()
-        recyclerView.adapter = thrillerAdapter
-    }
-
-    private fun initComedyRecyclerView(recyclerView: RecyclerView) {
-        prepareRecycler(recyclerView)
-        comedyAdapter = FilmsAdapter()
-        comedyAdapter.itemClickListener = onFilmClickListener()
-        recyclerView.adapter = comedyAdapter
-    }
-
     private fun onFilmClickListener() = object : OnItemClickListener {
         override fun onClick(film: Film) {
-            val bundle = Bundle()
-            bundle.putParcelable(KEY_FILM, film)
-            parentFragmentManager.beginTransaction().addToBackStack("main")
-                .replace(R.id.container, CurrentFilmFragment.newInstance(bundle)).commit()
+            parentFragmentManager.beginTransaction().addToBackStack(this@MainFragment.tag)
+                .replace(R.id.container, CurrentFilmFragment.newInstance(Bundle().apply {
+                    putParcelable(KEY_FILM, film)
+                })).commit()
         }
     }
 
-    private fun prepareRecycler(recyclerView: RecyclerView) {
-        recyclerView.setHasFixedSize(true)
-        setHasOptionsMenu(true)
-        val layoutManager = LinearLayoutManager(
-            requireContext(), LinearLayoutManager.HORIZONTAL, false
-        )
-        recyclerView.layoutManager = layoutManager
+    override fun onDestroy() {
+        _ui = null
+        super.onDestroy()
     }
 }

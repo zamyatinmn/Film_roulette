@@ -6,14 +6,33 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.geekbrains.filmroulette.POSTER_PREFIX
 import com.geekbrains.filmroulette.R
-import com.geekbrains.filmroulette.model.Film
+import com.geekbrains.filmroulette.model.MovieResult
+import com.squareup.picasso.Picasso
 
 class FilmsAdapter : RecyclerView.Adapter<BaseViewHolder>() {
-
     lateinit var itemClickListener: OnItemClickListener
-    private var filmData = mutableListOf(Film())
-    fun setFilmData(data: MutableList<Film>) {
+    private var filmData = mutableListOf(
+        MovieResult(
+            true,
+            "",
+            listOf(21),
+            1,
+            "",
+            "",
+            "",
+            1.0,
+            "",
+            "",
+            "",
+            false,
+            1.0,
+            1L
+        )
+    )
+
+    fun setFilmData(data: MutableList<MovieResult>) {
         filmData = data
         notifyDataSetChanged()
     }
@@ -35,11 +54,14 @@ class FilmsAdapter : RecyclerView.Adapter<BaseViewHolder>() {
 }
 
 class BaseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    fun setData(film: Film) {
+    fun setData(film: MovieResult) {
         itemView.apply {
-            findViewById<TextView>(R.id.film_title).text = film.name
-            findViewById<TextView>(R.id.film_date).text = film.date.toString()
-            findViewById<TextView>(R.id.film_rating).text = film.rate.toString()
+            findViewById<TextView>(R.id.film_title).text = film.title
+            findViewById<TextView>(R.id.film_date).text = film.release_date
+            findViewById<TextView>(R.id.film_rating).text = film.vote_average.toString()
+            Picasso.get()
+                .load("$POSTER_PREFIX${film.poster_path}")
+                .into(findViewById<ImageView>(R.id.poster))
         }
         val like = itemView.findViewById<ImageView>(R.id.film_like)
         setLike(film, like)
@@ -50,7 +72,7 @@ class BaseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     }
 
-    private fun setLike(film: Film, like: ImageView) {
+    private fun setLike(film: MovieResult, like: ImageView) {
         if (film.like) like.setImageResource(R.drawable.ic_filled_like)
         else like.setImageResource(R.drawable.ic_like)
     }

@@ -1,11 +1,11 @@
 package com.geekbrains.filmroulette.viewModel
 
-import com.geekbrains.filmroulette.model.Film
+import com.geekbrains.filmroulette.model.MovieResult
 
 sealed class AppState {
     data class Success(
-        val novelty: MutableList<Film>, val popular: MutableList<Film>,
-        val thriller: MutableList<Film>, val comedy: MutableList<Film>
+        val novelty: MutableList<MovieResult>, val popular: MutableList<MovieResult>,
+        val thriller: MutableList<MovieResult>, val comedy: MutableList<MovieResult>
     ) : AppState()
 
     data class ServerError(val error: Throwable) : AppState()

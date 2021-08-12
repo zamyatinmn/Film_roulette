@@ -1,10 +1,14 @@
 package com.geekbrains.filmroulette.model
 
+import com.geekbrains.filmroulette.viewModel.AppState
+
 interface IRepository {
-    fun getFilmFromServer(): Film
-    fun getFilmFromLocalStorage(): Film
-    fun getNovelty(): MutableList<Film>
-    fun getPopular(): MutableList<Film>
-    fun getThriller(): MutableList<Film>
-    fun getComedy(): MutableList<Film>
+    fun getFilmFromServer(movieID: Long): CurrentMovie
+    fun getFilmFromLocalStorage(): Film {
+        return Film()
+    }
+    fun getNovelty(): MutableList<MovieResult>
+    fun getPopular(): MutableList<MovieResult>
+    fun getThriller(): MutableList<MovieResult>
+    fun getComedy(): MutableList<MovieResult>
 }

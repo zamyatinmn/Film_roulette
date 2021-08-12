@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.geekbrains.filmroulette.R
 import com.geekbrains.filmroulette.databinding.FragmentMainBinding
-import com.geekbrains.filmroulette.model.Film
+import com.geekbrains.filmroulette.model.MovieResult
 import com.geekbrains.filmroulette.view.CurrentFilmFragment.Companion.KEY_FILM
 import com.geekbrains.filmroulette.viewModel.AppState
 import com.geekbrains.filmroulette.viewModel.MainViewModel
@@ -95,10 +95,10 @@ class MainFragment : Fragment() {
     }
 
     private fun onFilmClickListener() = object : OnItemClickListener {
-        override fun onClick(film: Film) {
+        override fun onClick(film: MovieResult) {
             parentFragmentManager.beginTransaction().addToBackStack(this@MainFragment.tag)
                 .replace(R.id.container, CurrentFilmFragment.newInstance(Bundle().apply {
-                    putParcelable(KEY_FILM, film)
+                    putParcelable(KEY_FILM, viewModel.getFilm(film.id))
                 })).commit()
         }
     }

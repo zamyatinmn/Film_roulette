@@ -1,7 +1,7 @@
 package com.geekbrains.filmroulette.view
 
-import com.geekbrains.filmroulette.model.Film
+import com.geekbrains.filmroulette.model.MovieResult
 
 interface OnItemClickListener {
-    fun onClick(film: Film)
+    fun onClick(film: MovieResult)
 }

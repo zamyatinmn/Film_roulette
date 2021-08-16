@@ -8,12 +8,13 @@ import kotlinx.android.parcel.Parcelize
  * Created by Maxim Zamyatin on 07.08.2021
  */
 
+@Parcelize
 data class Results(
     val page: Int,
     val results: MutableList<MovieResult>,
     val total_pages: Long,
     val total_results: Long
-)
+) : Parcelable
 
 @Parcelize
 data class MovieResult(

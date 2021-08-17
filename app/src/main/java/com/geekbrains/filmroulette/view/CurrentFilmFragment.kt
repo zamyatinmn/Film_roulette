@@ -5,14 +5,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.geekbrains.filmroulette.POSTER_PREFIX
 import com.geekbrains.filmroulette.R
 import com.geekbrains.filmroulette.databinding.FragmentCurrentFilmBinding
 import com.geekbrains.filmroulette.model.CurrentMovie
+import com.geekbrains.filmroulette.viewModel.AppState
+import com.geekbrains.filmroulette.viewModel.CurrentViewModel
 import com.squareup.picasso.Picasso
 
 class CurrentFilmFragment : Fragment() {
     private lateinit var ui: FragmentCurrentFilmBinding
+    private val viewModel: CurrentViewModel by lazy {
+        ViewModelProvider(this).get(CurrentViewModel::class.java)
+    }
 
     companion object {
         const val KEY_FILM = "KEY_FILM"
@@ -25,15 +31,6 @@ class CurrentFilmFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         ui = FragmentCurrentFilmBinding.inflate(inflater, container, false)
-        val film: CurrentMovie? = arguments?.getParcelable(KEY_FILM)
-        film?.let {
-            setData(film)
-            ui.filmLike.setOnClickListener {
-                film.like = !film.like
-                if (film.like) ui.filmLike.setImageResource(R.drawable.ic_filled_like)
-                else ui.filmLike.setImageResource(R.drawable.ic_like)
-            }
-        }
         return ui.root
     }
 
@@ -61,6 +58,32 @@ class CurrentFilmFragment : Fragment() {
 
             if (film.like) filmLike.setImageResource(R.drawable.ic_filled_like)
             else filmLike.setImageResource(R.drawable.ic_like)
+        }
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val filmID = arguments?.getLong(KEY_FILM)
+        filmID?.apply {
+            viewModel.getFilm(this, getString(R.string.language))
+        }
+        viewModel.getLiveData().observe(viewLifecycleOwner, { renderData(it) })
+    }
+
+    private fun renderData(appState: AppState) {
+        when (appState) {
+            is AppState.Loading -> {
+                ui.loading.visible()
+            }
+            is AppState.SuccessCurrent -> {
+                ui.loading.gone()
+                setData(appState.film)
+                ui.filmLike.setOnClickListener {
+                    appState.film.like = !appState.film.like
+                    if (appState.film.like) ui.filmLike.setImageResource(R.drawable.ic_filled_like)
+                    else ui.filmLike.setImageResource(R.drawable.ic_like)
+                }
+            }
         }
     }
 }

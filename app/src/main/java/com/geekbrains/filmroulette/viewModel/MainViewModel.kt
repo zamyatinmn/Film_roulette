@@ -4,6 +4,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.geekbrains.filmroulette.model.ApiRepository
 import com.geekbrains.filmroulette.model.IRepository
+import com.geekbrains.filmroulette.model.Results
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class MainViewModel(
     private val liveDataObserver: MutableLiveData<AppState> = MutableLiveData(),
@@ -11,22 +15,79 @@ class MainViewModel(
 ) : ViewModel() {
     fun getLiveData() = liveDataObserver
 
-    fun getFilmData() = getDataFromLocal()
-    fun getFilm(id: Long) = repository.getFilmFromServer(id)
+    fun getFilmData(language: String) {
+        liveDataObserver.postValue(AppState.Loading)
+        repository.getDataNovelty(language, callbackNovelty)
+        repository.getDataPopular(language, callbackPopular)
+        repository.getDataThriller(language, callbackThriller)
+        repository.getDataComedy(language, callbackComedy)
+    }
 
-    //temporary plug
-    private fun getDataFromLocal() {
-        when (1) {
-            0 -> liveDataObserver.value = AppState.Loading
-            1 -> repository.apply {
-                liveDataObserver.value = AppState.Success(
-                    getNovelty(), getPopular(), getThriller(), getComedy()
+    private val callbackNovelty = object : Callback<Results> {
+        override fun onResponse(call: Call<Results>, response: Response<Results>) {
+            val serverResponse: Results? = response.body()
+            if (response.isSuccessful && serverResponse != null) {
+                liveDataObserver.postValue(
+                    AppState.SuccessNovelty(serverResponse.results)
                 )
+            } else {
+                liveDataObserver.postValue(AppState.ServerError(Throwable("что-то не так..")))
             }
-            2 -> liveDataObserver.value =
-                AppState.ServerError(Throwable("something wrong with server"))
-            3 -> liveDataObserver.value =
-                AppState.LocalError(Throwable("something wrong with local"))
+        }
+
+        override fun onFailure(call: Call<Results>, t: Throwable) {
+            liveDataObserver.postValue(AppState.ServerError(t))
+        }
+    }
+
+    private val callbackPopular = object : Callback<Results> {
+        override fun onResponse(call: Call<Results>, response: Response<Results>) {
+            val serverResponse: Results? = response.body()
+            if (response.isSuccessful && serverResponse != null) {
+                liveDataObserver.postValue(
+                    AppState.SuccessPopular(serverResponse.results)
+                )
+            } else {
+                liveDataObserver.postValue(AppState.ServerError(Throwable("что-то не так..")))
+            }
+        }
+
+        override fun onFailure(call: Call<Results>, t: Throwable) {
+            liveDataObserver.postValue(AppState.ServerError(t))
+        }
+    }
+
+    private val callbackThriller = object : Callback<Results> {
+        override fun onResponse(call: Call<Results>, response: Response<Results>) {
+            val serverResponse: Results? = response.body()
+            if (response.isSuccessful && serverResponse != null) {
+                liveDataObserver.postValue(
+                    AppState.SuccessThriller(serverResponse.results)
+                )
+            } else {
+                liveDataObserver.postValue(AppState.ServerError(Throwable("что-то не так..")))
+            }
+        }
+
+        override fun onFailure(call: Call<Results>, t: Throwable) {
+            liveDataObserver.postValue(AppState.ServerError(t))
+        }
+    }
+
+    private val callbackComedy = object : Callback<Results> {
+        override fun onResponse(call: Call<Results>, response: Response<Results>) {
+            val serverResponse: Results? = response.body()
+            if (response.isSuccessful && serverResponse != null) {
+                liveDataObserver.postValue(
+                    AppState.SuccessComedy(serverResponse.results)
+                )
+            } else {
+                liveDataObserver.postValue(AppState.ServerError(Throwable("что-то не так..")))
+            }
+        }
+
+        override fun onFailure(call: Call<Results>, t: Throwable) {
+            liveDataObserver.postValue(AppState.ServerError(t))
         }
     }
 }

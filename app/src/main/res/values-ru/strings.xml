@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="main">главная</string>
+    <string name="favorites">избранное</string>
+    <string name="deferred">отложено</string>
+    <string name="minutes">мин</string>
+    <string name="budget">Бюджет</string>
+    <string name="revenue">Касса</string>
+    <string name="language">ru-RU</string>
+    <string name="novelty">Новинки</string>
+    <string name="popular">Популярное</string>
+    <string name="thriller">Боевики</string>
+    <string name="comedy">Комедии</string>
+</resources>

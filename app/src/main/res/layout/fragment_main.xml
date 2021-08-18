@@ -22,7 +22,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="Новинки"
+                    android:text="@string/novelty"
                     android:textSize="@dimen/header_text_size" />
 
                 <androidx.recyclerview.widget.RecyclerView
@@ -34,7 +34,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="Популярное"
+                    android:text="@string/popular"
                     android:textSize="@dimen/header_text_size" />
 
                 <androidx.recyclerview.widget.RecyclerView
@@ -46,7 +46,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="Боевики"
+                    android:text="@string/thriller"
                     android:textSize="@dimen/header_text_size" />
 
                 <androidx.recyclerview.widget.RecyclerView
@@ -58,7 +58,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="Комедии"
+                    android:text="@string/comedy"
                     android:textSize="@dimen/header_text_size" />
 
                 <androidx.recyclerview.widget.RecyclerView

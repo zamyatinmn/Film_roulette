@@ -1,14 +1,11 @@
 package com.geekbrains.filmroulette.model
 
-import com.geekbrains.filmroulette.viewModel.AppState
+import retrofit2.Callback
 
 interface IRepository {
-    fun getFilmFromServer(movieID: Long): CurrentMovie
-    fun getFilmFromLocalStorage(): Film {
-        return Film()
-    }
-    fun getNovelty(): MutableList<MovieResult>
-    fun getPopular(): MutableList<MovieResult>
-    fun getThriller(): MutableList<MovieResult>
-    fun getComedy(): MutableList<MovieResult>
+    fun getDataFilm(movieID: Long, language: String, callback: Callback<CurrentMovie>)
+    fun getDataNovelty(language: String, callback: Callback<Results>)
+    fun getDataPopular(language: String, callback: Callback<Results>)
+    fun getDataThriller(language: String, callback: Callback<Results>)
+    fun getDataComedy(language: String, callback: Callback<Results>)
 }

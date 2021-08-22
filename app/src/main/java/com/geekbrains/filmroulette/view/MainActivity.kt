@@ -53,9 +53,16 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.search -> return true//do search
-            else -> return false
+        return when (item.itemId) {
+            R.id.search -> true//do search
+            R.id.settings -> {
+                supportFragmentManager.beginTransaction()
+                    .addToBackStack("settings")
+                    .replace(ui.container.id, SettingsFragment.newInstance())
+                    .commit()
+                true
+            }
+            else -> false
         }
     }
 }

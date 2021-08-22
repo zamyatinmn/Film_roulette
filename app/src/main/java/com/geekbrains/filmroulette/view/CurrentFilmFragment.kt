@@ -12,6 +12,7 @@ import com.geekbrains.filmroulette.databinding.FragmentCurrentFilmBinding
 import com.geekbrains.filmroulette.model.CurrentMovie
 import com.geekbrains.filmroulette.viewModel.AppState
 import com.geekbrains.filmroulette.viewModel.CurrentViewModel
+import com.geekbrains.filmroulette.viewModel.MainViewModel
 import com.squareup.picasso.Picasso
 
 class CurrentFilmFragment : Fragment() {
@@ -67,15 +68,15 @@ class CurrentFilmFragment : Fragment() {
         filmID?.apply {
             viewModel.getFilm(this, getString(R.string.language))
         }
-        viewModel.getLiveData().observe(viewLifecycleOwner, { renderData(it) })
+        viewModel.getLiveData().observe(viewLifecycleOwner, {renderData(it)})
     }
 
-    private fun renderData(appState: AppState) {
-        when (appState) {
+    private fun renderData(appState: AppState){
+        when(appState){
             is AppState.Loading -> {
                 ui.loading.visible()
             }
-            is AppState.SuccessCurrent -> {
+            is AppState.SuccessCurrent ->{
                 ui.loading.gone()
                 setData(appState.film)
                 ui.filmLike.setOnClickListener {

@@ -18,3 +18,5 @@ const val SORT_BY_RELEASE_DATE = "release_date.desc"
 const val SORT_BY_POPULARITY = "popularity.desc"
 const val GENRE_THRILLER = 53
 const val GENRE_COMEDY = 35
+const val ADULT_MODE_KEY = "ADULT_MODE_KEY"
+const val ADULT_KEY = "include_adult"

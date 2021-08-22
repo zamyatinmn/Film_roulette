@@ -21,22 +21,22 @@ class ApiRepository : IRepository {
 
     override fun getDataNovelty(language: String, callback: Callback<Results>) {
         val currentYear = Calendar.getInstance().get(Calendar.YEAR)
-        api.getNovelty(BuildConfig.API_KEY, SORT_BY_RELEASE_DATE, language, "$currentYear")
+        api.getNovelty(BuildConfig.API_KEY, App.isAdultMode, SORT_BY_RELEASE_DATE, language, "$currentYear")
             .enqueue(callback)
     }
 
     override fun getDataPopular(language: String, callback: Callback<Results>) {
-        api.getPopular(BuildConfig.API_KEY, SORT_BY_POPULARITY, language)
+        api.getPopular(BuildConfig.API_KEY, App.isAdultMode, SORT_BY_POPULARITY, language)
             .enqueue(callback)
     }
 
     override fun getDataThriller(language: String, callback: Callback<Results>) {
-        api.getByGenre(BuildConfig.API_KEY, language, GENRE_THRILLER)
+        api.getByGenre(BuildConfig.API_KEY, App.isAdultMode, language, GENRE_THRILLER)
             .enqueue(callback)
     }
 
     override fun getDataComedy(language: String, callback: Callback<Results>) {
-        api.getByGenre(BuildConfig.API_KEY, language, GENRE_COMEDY)
+        api.getByGenre(BuildConfig.API_KEY, App.isAdultMode, language, GENRE_COMEDY)
             .enqueue(callback)
     }
 

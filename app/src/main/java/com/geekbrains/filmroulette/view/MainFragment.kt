@@ -62,6 +62,15 @@ class MainFragment : Fragment() {
         )
         recyclerView.layoutManager = layoutManager
         adapter.itemClickListener = onFilmClickListener()
+        adapter.likeClickListener = object : OnClickLike{
+            override fun onClick(film: MovieResult) {
+                if (film.like){
+                    viewModel.saveFilmToDB(film)
+                } else {
+                    viewModel.deleteFilmFromDB(film)
+                }
+            }
+        }
         recyclerView.adapter = adapter
     }
 
@@ -94,6 +103,15 @@ class MainFragment : Fragment() {
     }
 
     private fun renderData(appState: AppState) {
+        val likeListener = object : OnClickLike{
+            override fun onClick(film: MovieResult) {
+                if (film.like){
+                    viewModel.saveFilmToDB(film)
+                } else {
+                    viewModel.deleteFilmFromDB(film)
+                }
+            }
+        }
         when (appState) {
             is AppState.Loading -> ui.loading.visible()
             is AppState.LocalError -> {
@@ -104,19 +122,19 @@ class MainFragment : Fragment() {
             }
             is AppState.SuccessNovelty -> {
                 ui.loading.gone()
-                noveltyAdapter.setFilmData(appState.novelty)
+                noveltyAdapter.setFilmData(appState.novelty, likeListener)
             }
             is AppState.SuccessPopular -> {
                 ui.loading.gone()
-                popularAdapter.setFilmData(appState.popular)
+                popularAdapter.setFilmData(appState.popular, likeListener)
             }
             is AppState.SuccessThriller -> {
                 ui.loading.gone()
-                thrillerAdapter.setFilmData(appState.thriller)
+                thrillerAdapter.setFilmData(appState.thriller, likeListener)
             }
             is AppState.SuccessComedy -> {
                 ui.loading.gone()
-                comedyAdapter.setFilmData(appState.comedy)
+                comedyAdapter.setFilmData(appState.comedy, likeListener)
             }
         }
     }

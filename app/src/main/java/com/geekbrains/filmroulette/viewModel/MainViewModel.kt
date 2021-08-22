@@ -2,18 +2,26 @@ package com.geekbrains.filmroulette.viewModel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.geekbrains.filmroulette.model.ApiRepository
-import com.geekbrains.filmroulette.model.IRepository
-import com.geekbrains.filmroulette.model.Results
+import com.geekbrains.filmroulette.App
+import com.geekbrains.filmroulette.model.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class MainViewModel(
     private val liveDataObserver: MutableLiveData<AppState> = MutableLiveData(),
-    private val repository: IRepository = ApiRepository()
+    private val repository: IRepository = ApiRepository(),
+    private val favoritesRepository :ILocalRepository = LocalRepository(App.getDao())
 ) : ViewModel() {
     fun getLiveData() = liveDataObserver
+
+    fun saveFilmToDB(film: MovieResult) {
+        favoritesRepository.saveEntity(film)
+    }
+
+    fun deleteFilmFromDB(film: MovieResult) {
+        favoritesRepository.deleteEntity(film)
+    }
 
     fun getFilmData(language: String) {
         liveDataObserver.postValue(AppState.Loading)
@@ -44,7 +52,7 @@ class MainViewModel(
         override fun onResponse(call: Call<Results>, response: Response<Results>) {
             val serverResponse: Results? = response.body()
             if (response.isSuccessful && serverResponse != null) {
-                liveDataObserver.postValue(
+                liveDataObserver.postValue( // TODO: 18.08.2021 Удалять из списка фильмы с лайком
                     AppState.SuccessPopular(serverResponse.results)
                 )
             } else {

@@ -11,4 +11,6 @@
     <string name="popular">Популярное</string>
     <string name="thriller">Боевики</string>
     <string name="comedy">Комедии</string>
+    <string name="adult_checkbox">18+ контент</string>
+    <string name="settings">Настройки</string>
 </resources>

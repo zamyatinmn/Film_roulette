@@ -11,4 +11,6 @@
     <string name="popular">Popular</string>
     <string name="thriller">Thriller</string>
     <string name="comedy">Comedy</string>
+    <string name="adult_checkbox">18+ content</string>
+    <string name="settings">Settings</string>
 </resources>

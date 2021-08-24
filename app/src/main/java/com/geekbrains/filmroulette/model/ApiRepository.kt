@@ -21,27 +21,27 @@ class ApiRepository : IRepository {
 
     override fun getDataNovelty(language: String, callback: Callback<Results>) {
         val currentYear = Calendar.getInstance().get(Calendar.YEAR)
-        api.getNovelty(BuildConfig.API_KEY, SORT_BY_RELEASE_DATE, language, "$currentYear")
+        api.getNovelty(API_KEY_VALUE, App.isAdultMode, SORT_BY_RELEASE_DATE, language, "$currentYear")
             .enqueue(callback)
     }
 
     override fun getDataPopular(language: String, callback: Callback<Results>) {
-        api.getPopular(BuildConfig.API_KEY, SORT_BY_POPULARITY, language)
+        api.getPopular(API_KEY_VALUE, App.isAdultMode, SORT_BY_POPULARITY, language)
             .enqueue(callback)
     }
 
     override fun getDataThriller(language: String, callback: Callback<Results>) {
-        api.getByGenre(BuildConfig.API_KEY, language, GENRE_THRILLER)
+        api.getByGenre(API_KEY_VALUE, App.isAdultMode, language, GENRE_THRILLER)
             .enqueue(callback)
     }
 
     override fun getDataComedy(language: String, callback: Callback<Results>) {
-        api.getByGenre(BuildConfig.API_KEY, language, GENRE_COMEDY)
+        api.getByGenre(API_KEY_VALUE, App.isAdultMode, language, GENRE_COMEDY)
             .enqueue(callback)
     }
 
     override fun getDataFilm(movieID: Long, language: String, callback: Callback<CurrentMovie>) {
-        api.getFilmData(movieID, BuildConfig.API_KEY, language)
+        api.getFilmData(movieID, API_KEY_VALUE, language)
             .enqueue(callback)
     }
 }

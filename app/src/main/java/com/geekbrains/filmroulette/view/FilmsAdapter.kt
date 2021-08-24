@@ -1,4 +1,4 @@
-package com.geekbrains.filmroulette.view
+    package com.geekbrains.filmroulette.view
 
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +13,7 @@ import com.squareup.picasso.Picasso
 
 class FilmsAdapter : RecyclerView.Adapter<BaseViewHolder>() {
     lateinit var itemClickListener: OnItemClickListener
+    lateinit var likeClickListener: OnClickLike
     private var filmData = mutableListOf(
         MovieResult(
             true,
@@ -32,9 +33,10 @@ class FilmsAdapter : RecyclerView.Adapter<BaseViewHolder>() {
         )
     )
 
-    fun setFilmData(data: MutableList<MovieResult>) {
+    fun setFilmData(data: MutableList<MovieResult>, listener: OnClickLike) {
         filmData = data
         notifyDataSetChanged()
+//        likeClickListener = listener
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder {
@@ -48,12 +50,14 @@ class FilmsAdapter : RecyclerView.Adapter<BaseViewHolder>() {
             itemClickListener.onClick(filmData[position])
         }
         holder.setData(filmData[position])
+        holder.listener = likeClickListener
     }
 
     override fun getItemCount() = filmData.size
 }
 
 class BaseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    lateinit var listener: OnClickLike
     fun setData(film: MovieResult) {
         itemView.apply {
             findViewById<TextView>(R.id.film_title).text = film.title
@@ -68,6 +72,7 @@ class BaseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         like.setOnClickListener {
             film.like = !film.like
             setLike(film, like)
+            listener.onClick(film)
         }
 
     }

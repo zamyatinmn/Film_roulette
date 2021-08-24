@@ -16,6 +16,7 @@ interface FilmAPI {
     @GET(DISCOVER_ENDPOINT)
     fun getNovelty(
         @Query(API_KEY_NAME) token:String,
+        @Query(ADULT_KEY) adultFlag: Boolean,
         @Query(SORT_KEY) sort:String,
         @Query(LANGUAGE_KEY) language: String,
         @Query(YEAR_KEY) year: String
@@ -24,6 +25,7 @@ interface FilmAPI {
     @GET(DISCOVER_ENDPOINT)
     fun getPopular(
         @Query(API_KEY_NAME) token:String,
+        @Query(ADULT_KEY) adultFlag: Boolean,
         @Query(SORT_KEY) sort:String,
         @Query(LANGUAGE_KEY) language: String
     ) : Call<Results>
@@ -31,6 +33,7 @@ interface FilmAPI {
     @GET(DISCOVER_ENDPOINT)
     fun getByGenre(
         @Query(API_KEY_NAME) token:String,
+        @Query(ADULT_KEY) adultFlag: Boolean,
         @Query(LANGUAGE_KEY) language: String,
         @Query(GENRE_KEY) genreId: Int
     ) : Call<Results>

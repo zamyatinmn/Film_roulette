@@ -79,11 +79,11 @@ class CurrentFilmFragment : Fragment() {
             is AppState.SuccessCurrent ->{
                 ui.loading.gone()
                 setData(appState.film)
-                ui.filmLike.setOnClickListener {
-                    appState.film.like = !appState.film.like
-                    if (appState.film.like) ui.filmLike.setImageResource(R.drawable.ic_filled_like)
-                    else ui.filmLike.setImageResource(R.drawable.ic_like)
-                }
+//                ui.filmLike.setOnClickListener {
+//                    appState.film.like = !appState.film.like
+//                    if (appState.film.like) ui.filmLike.setImageResource(R.drawable.ic_filled_like)
+//                    else ui.filmLike.setImageResource(R.drawable.ic_like)
+//                }
             }
         }
     }

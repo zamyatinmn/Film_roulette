@@ -11,8 +11,11 @@ import retrofit2.Response
 class MainViewModel(
     private val liveDataObserver: MutableLiveData<AppState> = MutableLiveData(),
     private val repository: IRepository = ApiRepository(),
-    private val favoritesRepository :ILocalRepository = LocalRepository(App.getDao())
+    private val favoritesRepository: ILocalRepository = LocalRepository(App.getDao())
 ) : ViewModel() {
+
+    private var favoritesFilms = mutableListOf<MovieResult>()
+
     fun getLiveData() = liveDataObserver
 
     fun saveFilmToDB(film: MovieResult) {
@@ -25,6 +28,7 @@ class MainViewModel(
 
     fun getFilmData(language: String) {
         liveDataObserver.postValue(AppState.Loading)
+        favoritesFilms = favoritesRepository.getAllFavorites()
         repository.getDataNovelty(language, callbackNovelty)
         repository.getDataPopular(language, callbackPopular)
         repository.getDataThriller(language, callbackThriller)
@@ -35,6 +39,7 @@ class MainViewModel(
         override fun onResponse(call: Call<Results>, response: Response<Results>) {
             val serverResponse: Results? = response.body()
             if (response.isSuccessful && serverResponse != null) {
+                deleteFavoritesFromServerResponse(serverResponse)
                 liveDataObserver.value = AppState.SuccessNovelty(serverResponse.results)
             } else {
                 liveDataObserver.postValue(AppState.ServerError(Throwable("что-то не так..")))
@@ -46,11 +51,35 @@ class MainViewModel(
         }
     }
 
+    private fun deleteFavoritesFromServerResponse(serverResponse: Results) {
+        val temp = mutableListOf<MovieResult>()
+        for (favoriteFilm in favoritesFilms) {
+            for (serverFilm in serverResponse.results) {
+                if (favoriteFilm.id == serverFilm.id) {
+                    temp.add(serverFilm)
+                }
+            }
+        }
+        for (film in temp){
+            serverResponse.results.remove(film)
+        }
+    }
+
+    private fun markFavoritesInServerResponse(serverResponse: Results){
+        for (favoriteFilm in favoritesFilms) {
+            for (serverFilm in serverResponse.results) {
+                if (favoriteFilm.id == serverFilm.id){
+                    serverFilm.like = true
+                }
+            }
+        }
+    }
+
     private val callbackPopular = object : Callback<Results> {
         override fun onResponse(call: Call<Results>, response: Response<Results>) {
             val serverResponse: Results? = response.body()
             if (response.isSuccessful && serverResponse != null) {
-         // TODO: 18.08.2021 Удалять из списка фильмы с лайком
+                deleteFavoritesFromServerResponse(serverResponse)
                 liveDataObserver.value = AppState.SuccessPopular(serverResponse.results)
             } else {
                 liveDataObserver.postValue(AppState.ServerError(Throwable("что-то не так..")))
@@ -66,6 +95,7 @@ class MainViewModel(
         override fun onResponse(call: Call<Results>, response: Response<Results>) {
             val serverResponse: Results? = response.body()
             if (response.isSuccessful && serverResponse != null) {
+                deleteFavoritesFromServerResponse(serverResponse)
                 liveDataObserver.value = AppState.SuccessThriller(serverResponse.results)
             } else {
                 liveDataObserver.postValue(AppState.ServerError(Throwable("что-то не так..")))
@@ -81,6 +111,7 @@ class MainViewModel(
         override fun onResponse(call: Call<Results>, response: Response<Results>) {
             val serverResponse: Results? = response.body()
             if (response.isSuccessful && serverResponse != null) {
+                deleteFavoritesFromServerResponse(serverResponse)
                 liveDataObserver.value = AppState.SuccessComedy(serverResponse.results)
             } else {
                 liveDataObserver.postValue(AppState.ServerError(Throwable("что-то не так..")))

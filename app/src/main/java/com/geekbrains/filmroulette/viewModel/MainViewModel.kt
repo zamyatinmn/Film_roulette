@@ -28,7 +28,11 @@ class MainViewModel(
 
     fun getFilmData(language: String) {
         liveDataObserver.postValue(AppState.Loading)
-        favoritesFilms = favoritesRepository.getAllFavorites()
+        favoritesRepository.getAllFavorites(object : CallbackDB{
+            override fun onResponse(result: MutableList<MovieResult>) {
+                favoritesFilms = result
+            }
+        })
         repository.getDataNovelty(language, callbackNovelty)
         repository.getDataPopular(language, callbackPopular)
         repository.getDataThriller(language, callbackThriller)

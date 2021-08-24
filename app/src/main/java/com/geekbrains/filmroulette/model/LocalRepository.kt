@@ -12,15 +12,22 @@ import com.geekbrains.filmroulette.view.convertMovieResultToEntity
 
 class LocalRepository(private val localDataSource: FilmDao) : ILocalRepository {
 
-    override fun getAllFavorites(): MutableList<MovieResult> {
-        return convertFilmEntityToMovieResult(localDataSource.all())
+    override fun getAllFavorites(callback: CallbackDB) {
+        Thread {
+            val temp = convertFilmEntityToMovieResult(localDataSource.all())
+            callback.onResponse(temp)
+        }.start()
     }
 
     override fun saveEntity(film: MovieResult) {
-        localDataSource.insert(convertMovieResultToEntity(film))
+        Thread {
+            localDataSource.insert(convertMovieResultToEntity(film))
+        }.start()
     }
 
     override fun deleteEntity(film: MovieResult) {
-        localDataSource.delete(convertMovieResultToEntity(film))
+        Thread {
+            localDataSource.delete(convertMovieResultToEntity(film))
+        }.start()
     }
 }

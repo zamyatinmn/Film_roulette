@@ -4,7 +4,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.geekbrains.filmroulette.App
 import com.geekbrains.filmroulette.model.*
-import com.geekbrains.filmroulette.view.convertFilmEntityToMovieResult
 
 
 /**
@@ -29,7 +28,11 @@ class FavoritesViewModel(
         favoritesRepository.deleteEntity(film)
     }
 
-    fun getData(): MutableList<MovieResult> {
-        return favoritesRepository.getAllFavorites()
+    fun getData() {
+        favoritesRepository.getAllFavorites(object : CallbackDB {
+            override fun onResponse(result: MutableList<MovieResult>) {
+                liveDataObserver.postValue(AppState.Success(result))
+            }
+        })
     }
 }

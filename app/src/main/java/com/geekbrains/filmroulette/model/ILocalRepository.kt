@@ -7,7 +7,7 @@ package com.geekbrains.filmroulette.model
 
 
 interface ILocalRepository {
-    fun getAllFavorites(): MutableList<MovieResult>
+    fun getAllFavorites(callback: CallbackDB)
     fun saveEntity(film: MovieResult)
     fun deleteEntity(film: MovieResult)
 }

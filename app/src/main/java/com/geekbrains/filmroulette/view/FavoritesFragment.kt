@@ -42,6 +42,7 @@ class FavoritesFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _ui = FragmentFavoritesBinding.inflate(inflater, container, false)
+        viewModel.getData()
         setHasOptionsMenu(true)
         ui.recycler.apply {
             setHasFixedSize(true)
@@ -50,19 +51,7 @@ class FavoritesFragment : Fragment() {
         ui.recycler.adapter = adapter
 
         ui.swipeRefresh.setOnRefreshListener {
-            adapter.setFilmData(
-                viewModel.getData(),
-                object : OnClickLike {
-                    override fun onClick(film: MovieResult) {
-                        if (film.like) {
-                            viewModel.saveFilmToDB(film)
-                        } else {
-                            viewModel.deleteFilmFromDB(film)
-                        }
-                    }
-                }
-            )
-
+            viewModel.getData()
             adapter.notifyDataSetChanged()
             ui.swipeRefresh.isRefreshing = false
         }
@@ -71,7 +60,7 @@ class FavoritesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        viewModel.getLiveData().observe(viewLifecycleOwner, {renderData(it)})
+        viewModel.getLiveData().observe(viewLifecycleOwner, { renderData(it) })
 
         adapter.itemClickListener = onFilmClickListener()
         adapter.likeClickListener = object : OnClickLike {
@@ -83,23 +72,27 @@ class FavoritesFragment : Fragment() {
                 }
             }
         }
-        adapter.setFilmData(
-            viewModel.getData(),
-            object : OnClickLike {
-                override fun onClick(film: MovieResult) {
-                    if (film.like) {
-                        viewModel.saveFilmToDB(film)
-                    } else {
-                        viewModel.deleteFilmFromDB(film)
-                    }
-                }
-            }
-        )
+
         super.onViewCreated(view, savedInstanceState)
     }
 
     private fun renderData(appState: AppState) {
-
+        when (appState) {
+            is AppState.Success -> {
+                adapter.setFilmData(
+                    appState.result,
+                    object : OnClickLike {
+                        override fun onClick(film: MovieResult) {
+                            if (film.like) {
+                                viewModel.saveFilmToDB(film)
+                            } else {
+                                viewModel.deleteFilmFromDB(film)
+                            }
+                        }
+                    }
+                )
+            }
+        }
     }
 
     override fun onDestroy() {

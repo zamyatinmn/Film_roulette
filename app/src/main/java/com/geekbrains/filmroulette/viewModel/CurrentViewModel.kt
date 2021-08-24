@@ -26,7 +26,12 @@ class CurrentViewModel(
 
     fun getFilm(id: Long, language: String) {
         liveDataObserver.postValue(AppState.Loading)
-        favorites = localRepository.getAllFavorites()
+        localRepository.getAllFavorites(object : CallbackDB {
+            override fun onResponse(result: MutableList<MovieResult>) {
+                favorites = result
+            }
+
+        })
         repository.getDataFilm(id, language, callbackMovie)
     }
 
@@ -34,8 +39,8 @@ class CurrentViewModel(
         override fun onResponse(call: Call<CurrentMovie>, response: Response<CurrentMovie>) {
             val serverResponse: CurrentMovie? = response.body()
             if (response.isSuccessful && serverResponse != null) {
-                for (film in favorites){
-                    if (serverResponse.id == film.id){
+                for (film in favorites) {
+                    if (serverResponse.id == film.id) {
                         serverResponse.like = true
                     }
                 }

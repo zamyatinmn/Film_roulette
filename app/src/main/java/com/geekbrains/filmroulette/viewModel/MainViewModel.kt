@@ -35,9 +35,7 @@ class MainViewModel(
         override fun onResponse(call: Call<Results>, response: Response<Results>) {
             val serverResponse: Results? = response.body()
             if (response.isSuccessful && serverResponse != null) {
-                liveDataObserver.postValue(
-                    AppState.SuccessNovelty(serverResponse.results)
-                )
+                liveDataObserver.value = AppState.SuccessNovelty(serverResponse.results)
             } else {
                 liveDataObserver.postValue(AppState.ServerError(Throwable("что-то не так..")))
             }
@@ -52,9 +50,8 @@ class MainViewModel(
         override fun onResponse(call: Call<Results>, response: Response<Results>) {
             val serverResponse: Results? = response.body()
             if (response.isSuccessful && serverResponse != null) {
-                liveDataObserver.postValue( // TODO: 18.08.2021 Удалять из списка фильмы с лайком
-                    AppState.SuccessPopular(serverResponse.results)
-                )
+         // TODO: 18.08.2021 Удалять из списка фильмы с лайком
+                liveDataObserver.value = AppState.SuccessPopular(serverResponse.results)
             } else {
                 liveDataObserver.postValue(AppState.ServerError(Throwable("что-то не так..")))
             }
@@ -69,9 +66,7 @@ class MainViewModel(
         override fun onResponse(call: Call<Results>, response: Response<Results>) {
             val serverResponse: Results? = response.body()
             if (response.isSuccessful && serverResponse != null) {
-                liveDataObserver.postValue(
-                    AppState.SuccessThriller(serverResponse.results)
-                )
+                liveDataObserver.value = AppState.SuccessThriller(serverResponse.results)
             } else {
                 liveDataObserver.postValue(AppState.ServerError(Throwable("что-то не так..")))
             }
@@ -86,9 +81,7 @@ class MainViewModel(
         override fun onResponse(call: Call<Results>, response: Response<Results>) {
             val serverResponse: Results? = response.body()
             if (response.isSuccessful && serverResponse != null) {
-                liveDataObserver.postValue(
-                    AppState.SuccessComedy(serverResponse.results)
-                )
+                liveDataObserver.value = AppState.SuccessComedy(serverResponse.results)
             } else {
                 liveDataObserver.postValue(AppState.ServerError(Throwable("что-то не так..")))
             }

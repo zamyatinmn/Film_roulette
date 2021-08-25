@@ -33,8 +33,8 @@ class MainActivity : AppCompatActivity() {
                     changeScreen(FavoritesFragment.newInstance())
                     true
                 }
-                R.id.want_see -> {
-                    changeScreen(DeferredFragment.newInstance())
+                R.id.contacts -> {
+                    changeScreen(ContactsFragment.newInstance())
                     true
                 }
                 else -> false

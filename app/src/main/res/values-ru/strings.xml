@@ -13,4 +13,15 @@
     <string name="comedy">Комедии</string>
     <string name="adult_checkbox">18+ контент</string>
     <string name="settings">Настройки</string>
+    <string name="contacts">контакты</string>
+    <string name="need_permission_header">Требуется разрешение</string>
+    <string name="need_permission_text">Без этого разрешения приложение работать не будет</string>
+    <string name="need_permission_text_again">Перейдите в настройки и выдайте разрешение вручную</string>
+    <string name="need_permission_give">Выдать</string>
+    <string name="need_permission_dont_give">Не давать</string>
+    <string name="call">Позвонить</string>
+    <string name="home">Домашний</string>
+    <string name="mobile">Мобильный</string>
+    <string name="work">Рабочий</string>
+    <string name="other">Другой</string>
 </resources>

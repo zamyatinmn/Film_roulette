@@ -16,7 +16,8 @@ import com.geekbrains.filmroulette.viewModel.MainViewModel
 import com.squareup.picasso.Picasso
 
 class CurrentFilmFragment : Fragment() {
-    private lateinit var ui: FragmentCurrentFilmBinding
+    private var _ui: FragmentCurrentFilmBinding? = null
+    private val ui get() = _ui!!
     private val viewModel: CurrentViewModel by lazy {
         ViewModelProvider(this).get(CurrentViewModel::class.java)
     }
@@ -31,7 +32,7 @@ class CurrentFilmFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        ui = FragmentCurrentFilmBinding.inflate(inflater, container, false)
+        _ui = FragmentCurrentFilmBinding.inflate(inflater, container, false)
         return ui.root
     }
 
@@ -86,5 +87,10 @@ class CurrentFilmFragment : Fragment() {
 //                }
             }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _ui = null
     }
 }

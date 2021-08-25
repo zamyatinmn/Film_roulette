@@ -1,6 +1,7 @@
 package com.geekbrains.filmroulette.room
 
 import androidx.room.*
+import com.geekbrains.filmroulette.App
 
 
 /**
@@ -9,8 +10,8 @@ import androidx.room.*
 
 @Dao
 interface FilmDao {
-    @Query("SELECT * FROM FilmEntity")
-    fun all(): List<FilmEntity>
+    @Query("SELECT * FROM FilmEntity WHERE adult LIKE :adult")
+    fun all(adult: Boolean): List<FilmEntity>
 
     @Query("SELECT * FROM FilmEntity WHERE id LIKE :id")
     fun getDataByID(id: Long): List<FilmEntity>

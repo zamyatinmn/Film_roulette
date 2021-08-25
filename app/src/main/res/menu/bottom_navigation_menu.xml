@@ -17,10 +17,10 @@
         app:showAsAction="ifRoom" />
 
     <item
-        android:id="@+id/want_see"
-        android:icon="@android:drawable/ic_media_next"
+        android:id="@+id/contacts"
+        android:icon="@android:drawable/ic_menu_call"
         android:orderInCategory="10"
-        android:title="@string/deferred"
+        android:title="@string/contacts"
         app:showAsAction="ifRoom" />
 
 </menu>

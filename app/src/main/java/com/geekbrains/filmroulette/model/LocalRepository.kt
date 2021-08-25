@@ -1,5 +1,6 @@
 package com.geekbrains.filmroulette.model
 
+import com.geekbrains.filmroulette.App
 import com.geekbrains.filmroulette.room.FilmDao
 import com.geekbrains.filmroulette.view.convertFilmEntityToMovieResult
 import com.geekbrains.filmroulette.view.convertMovieResultToEntity
@@ -14,7 +15,7 @@ class LocalRepository(private val localDataSource: FilmDao) : ILocalRepository {
 
     override fun getAllFavorites(callback: CallbackDB) {
         Thread {
-            val temp = convertFilmEntityToMovieResult(localDataSource.all())
+            val temp = convertFilmEntityToMovieResult(localDataSource.all(App.isAdultMode))
             callback.onResponse(temp)
         }.start()
     }

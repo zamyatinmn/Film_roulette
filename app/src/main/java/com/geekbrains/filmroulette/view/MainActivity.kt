@@ -33,9 +33,9 @@ class MainActivity : AppCompatActivity() {
 
     private val bundle = Bundle()
 
-    fun getLocationOnMap(location: String){
+    fun getLocationOnMap(location: String) {
         bundle.putString(PLACE_OF_BIRTH_KEY, location)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             checkPermission()
         } else {
             showMap()

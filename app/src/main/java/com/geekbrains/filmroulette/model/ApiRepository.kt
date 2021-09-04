@@ -21,7 +21,13 @@ class ApiRepository : IRepository {
 
     override fun getDataNovelty(language: String, callback: Callback<Results>) {
         val currentYear = Calendar.getInstance().get(Calendar.YEAR)
-        api.getNovelty(API_KEY_VALUE, App.isAdultMode, SORT_BY_RELEASE_DATE, language, "$currentYear")
+        api.getNovelty(
+            API_KEY_VALUE,
+            App.isAdultMode,
+            SORT_BY_RELEASE_DATE,
+            language,
+            "$currentYear"
+        )
             .enqueue(callback)
     }
 

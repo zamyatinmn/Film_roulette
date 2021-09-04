@@ -79,14 +79,20 @@ class CurrentViewModel(
     private val callbackCredits = object : Callback<Credits> {
         override fun onResponse(call: Call<Credits>, response: Response<Credits>) {
             val creditsResponse: Credits? = response.body()
-            if (response.isSuccessful && creditsResponse != null){
-                for (cast in creditsResponse.cast){
+            if (response.isSuccessful && creditsResponse != null) {
+                for (cast in creditsResponse.cast) {
                     cast.cast_id
                     cast.name
                 }
                 liveDataObserver.postValue(AppState.SuccessCast(creditsResponse.cast))
             } else {
-                liveDataObserver.postValue(AppState.ServerError(Throwable(response.errorBody().toString())))
+                liveDataObserver.postValue(
+                    AppState.ServerError(
+                        Throwable(
+                            response.errorBody().toString()
+                        )
+                    )
+                )
             }
         }
 

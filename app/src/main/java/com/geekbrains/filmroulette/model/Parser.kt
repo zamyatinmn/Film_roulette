@@ -100,13 +100,13 @@ data class SpokenLanguage(
     val name: String
 ) : Parcelable
 
-data class Credits (
+data class Credits(
     val id: Long,
     val cast: List<Cast>,
     val crew: List<Cast>
 )
 
-data class Cast (
+data class Cast(
     val adult: Boolean,
     val gender: Long,
     val id: Long,
@@ -138,7 +138,7 @@ enum class Department(val value: String) {
     Writing("Writing");
 }
 
-data class Person (
+data class Person(
     val birthday: String,
     val known_for_department: String,
     val deathday: Any? = null,

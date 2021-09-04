@@ -1,6 +1,5 @@
 package com.geekbrains.filmroulette.model
 
-import com.geekbrains.filmroulette.API_KEY_VALUE
 import retrofit2.Callback
 
 interface IRepository {

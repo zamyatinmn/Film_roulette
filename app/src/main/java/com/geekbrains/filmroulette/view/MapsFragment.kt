@@ -1,25 +1,23 @@
 package com.geekbrains.filmroulette.view
 
 import android.Manifest
-import android.graphics.Color
 import android.location.Geocoder
-import androidx.fragment.app.Fragment
-
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.content.PermissionChecker
+import androidx.fragment.app.Fragment
 import com.geekbrains.filmroulette.PLACE_OF_BIRTH_KEY
 import com.geekbrains.filmroulette.R
 import com.geekbrains.filmroulette.databinding.FragmentMapsBinding
-
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.*
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 
 class MapsFragment : Fragment() {
 
@@ -41,8 +39,13 @@ class MapsFragment : Fragment() {
             .getFromLocationName(arguments?.getString(PLACE_OF_BIRTH_KEY), 1)
         val latLngLocation = LatLng(location[0].latitude, location[0].longitude)
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLngLocation, 10f))
-        map.addMarker(MarkerOptions().position(latLngLocation).title(arguments?.getString(
-            PLACE_OF_BIRTH_KEY)))
+        map.addMarker(
+            MarkerOptions().position(latLngLocation).title(
+                arguments?.getString(
+                    PLACE_OF_BIRTH_KEY
+                )
+            )
+        )
 
         myLocation(googleMap)
         googleMap.uiSettings.isZoomControlsEnabled = true

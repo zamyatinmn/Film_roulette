@@ -73,15 +73,15 @@ class CurrentFilmFragment : Fragment() {
             viewModel.getFilm(this, getString(R.string.language))
             viewModel.getCasts(this, getString(R.string.language))
         }
-        viewModel.getLiveData().observe(viewLifecycleOwner, {renderData(it)})
+        viewModel.getLiveData().observe(viewLifecycleOwner, { renderData(it) })
     }
 
-    private fun renderData(appState: AppState){
-        when(appState){
+    private fun renderData(appState: AppState) {
+        when (appState) {
             is AppState.Loading -> {
                 ui.loading.visible()
             }
-            is AppState.SuccessCurrent ->{
+            is AppState.SuccessCurrent -> {
                 ui.loading.gone()
                 setData(appState.film)
 //                ui.filmLike.setOnClickListener {
@@ -95,10 +95,10 @@ class CurrentFilmFragment : Fragment() {
                 v.text = getString(R.string.actors)
                 ui.wrap.addView(v)
                 for (cast in appState.result) {
-                    if (cast.known_for_department == Department.Acting){
+                    if (cast.known_for_department == Department.Acting) {
                         val v = TextView(requireContext())
                         v.text = "${cast.character} - ${cast.name}"
-                        v.setOnClickListener{
+                        v.setOnClickListener {
                             viewModel.getActorPlaceOfBirth(cast.id, getString(R.string.language))
                         }
                         ui.wrap.addView(v)
@@ -106,12 +106,16 @@ class CurrentFilmFragment : Fragment() {
                 }
             }
             is AppState.OpenMap -> {
-                if (appState.person.place_of_birth != "" && appState.person.place_of_birth != null){
+                if (appState.person.place_of_birth != "" && appState.person.place_of_birth != null) {
                     val bundle = Bundle()
                     bundle.putString(PLACE_OF_BIRTH_KEY, appState.person.place_of_birth)
                     (requireActivity() as MainActivity).getLocationOnMap(appState.person.place_of_birth)
                 } else {
-                    Toast.makeText(requireContext(), getString(R.string.no_place_of_birth), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        requireContext(),
+                        getString(R.string.no_place_of_birth),
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
         }

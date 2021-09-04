@@ -28,7 +28,7 @@ class MainViewModel(
 
     fun getFilmData(language: String) {
         liveDataObserver.postValue(AppState.Loading)
-        favoritesRepository.getAllFavorites(object : CallbackDB{
+        favoritesRepository.getAllFavorites(object : CallbackDB {
             override fun onResponse(result: MutableList<MovieResult>) {
                 favoritesFilms = result
             }
@@ -64,15 +64,15 @@ class MainViewModel(
                 }
             }
         }
-        for (film in temp){
+        for (film in temp) {
             serverResponse.results.remove(film)
         }
     }
 
-    private fun markFavoritesInServerResponse(serverResponse: Results){
+    private fun markFavoritesInServerResponse(serverResponse: Results) {
         for (favoriteFilm in favoritesFilms) {
             for (serverFilm in serverResponse.results) {
-                if (favoriteFilm.id == serverFilm.id){
+                if (favoriteFilm.id == serverFilm.id) {
                     serverFilm.like = true
                 }
             }

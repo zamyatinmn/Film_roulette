@@ -24,6 +24,10 @@ class CurrentViewModel(
 
     fun getLiveData() = liveDataObserver
 
+    fun getCasts(id: Long, language: String) {
+        repository.getFilmCredits(id, language, callbackCredits)
+    }
+
     fun getFilm(id: Long, language: String) {
         liveDataObserver.postValue(AppState.Loading)
         localRepository.getAllFavorites(object : CallbackDB {
@@ -33,6 +37,23 @@ class CurrentViewModel(
 
         })
         repository.getDataFilm(id, language, callbackMovie)
+    }
+
+    fun getActorPlaceOfBirth(id: Long, language: String) {
+        repository.getActorDetails(id, language, actorCallback)
+    }
+
+    private val actorCallback = object : Callback<Person> {
+        override fun onResponse(call: Call<Person>, response: Response<Person>) {
+            val responsePerson: Person? = response.body()
+            if (response.isSuccessful && responsePerson != null) {
+                liveDataObserver.postValue(AppState.OpenMap(responsePerson))
+            }
+        }
+
+        override fun onFailure(call: Call<Person>, t: Throwable) {
+            liveDataObserver.postValue(AppState.ServerError(t))
+        }
     }
 
     private val callbackMovie = object : Callback<CurrentMovie> {
@@ -51,6 +72,31 @@ class CurrentViewModel(
         }
 
         override fun onFailure(call: Call<CurrentMovie>, t: Throwable) {
+            liveDataObserver.postValue(AppState.ServerError(t))
+        }
+    }
+
+    private val callbackCredits = object : Callback<Credits> {
+        override fun onResponse(call: Call<Credits>, response: Response<Credits>) {
+            val creditsResponse: Credits? = response.body()
+            if (response.isSuccessful && creditsResponse != null) {
+                for (cast in creditsResponse.cast) {
+                    cast.cast_id
+                    cast.name
+                }
+                liveDataObserver.postValue(AppState.SuccessCast(creditsResponse.cast))
+            } else {
+                liveDataObserver.postValue(
+                    AppState.ServerError(
+                        Throwable(
+                            response.errorBody().toString()
+                        )
+                    )
+                )
+            }
+        }
+
+        override fun onFailure(call: Call<Credits>, t: Throwable) {
             liveDataObserver.postValue(AppState.ServerError(t))
         }
     }

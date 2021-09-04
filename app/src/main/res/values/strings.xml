@@ -24,4 +24,8 @@
     <string name="mobile">Mobile</string>
     <string name="work">Work</string>
     <string name="other">Other</string>
+    <string name="map">Map</string>
+    <string name="no_place_of_birth">we don\'t have place of birth</string>
+    <string name="actors">Actors:</string>
+    <string name="go">go</string>
 </resources>

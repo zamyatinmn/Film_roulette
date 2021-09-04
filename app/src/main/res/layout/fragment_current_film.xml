@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingStart="@dimen/space"
@@ -47,70 +48,77 @@
         android:layout_marginTop="@dimen/little_space"
         android:src="@drawable/poster"
         app:layout_constraintBottom_toTopOf="@id/guide"
-        app:layout_constraintEnd_toStartOf="@id/wrap"
+        app:layout_constraintEnd_toStartOf="@id/wrap_scroll"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/original_name" />
 
-    <LinearLayout
-        android:id="@+id/wrap"
+    <ScrollView
+        android:id="@+id/wrap_scroll"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:orientation="vertical"
         app:layout_constraintBottom_toTopOf="@id/guide"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/poster"
         app:layout_constraintTop_toTopOf="@id/poster">
 
-        <TextView
-            android:id="@+id/genres"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/wrap"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="крошилово, мочилово"
-            app:layout_constraintStart_toEndOf="@id/poster"
-            app:layout_constraintTop_toTopOf="@id/poster" />
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/duration"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="117 minutes"
-            app:layout_constraintStart_toEndOf="@id/poster"
-            app:layout_constraintTop_toBottomOf="@id/genres" />
+            <TextView
+                android:id="@+id/genres"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="крошилово, мочилово"
+                app:layout_constraintStart_toEndOf="@id/poster"
+                app:layout_constraintTop_toTopOf="@id/poster" />
 
-        <TextView
-            android:id="@+id/film_rating"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="7.8 cucumbers"
-            app:layout_constraintStart_toEndOf="@id/poster"
-            app:layout_constraintTop_toBottomOf="@id/duration" />
+            <TextView
+                android:id="@+id/duration"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="117 minutes"
+                app:layout_constraintStart_toEndOf="@id/poster"
+                app:layout_constraintTop_toBottomOf="@id/genres" />
 
-        <TextView
-            android:id="@+id/budget"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="100500\$"
-            app:layout_constraintStart_toEndOf="@id/poster"
-            app:layout_constraintTop_toBottomOf="@id/film_rating" />
+            <TextView
+                android:id="@+id/film_rating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="7.8 cucumbers"
+                app:layout_constraintStart_toEndOf="@id/poster"
+                app:layout_constraintTop_toBottomOf="@id/duration" />
 
-        <TextView
-            android:id="@+id/revenue"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="500999\$"
-            app:layout_constraintStart_toEndOf="@id/poster"
-            app:layout_constraintTop_toBottomOf="@id/budget" />
+            <TextView
+                android:id="@+id/budget"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="100500\$"
+                app:layout_constraintStart_toEndOf="@id/poster"
+                app:layout_constraintTop_toBottomOf="@id/film_rating" />
 
-        <TextView
-            android:id="@+id/date"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="1970"
-            app:layout_constraintStart_toEndOf="@id/poster"
-            app:layout_constraintTop_toBottomOf="@id/revenue" />
+            <TextView
+                android:id="@+id/revenue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="500999\$"
+                app:layout_constraintStart_toEndOf="@id/poster"
+                app:layout_constraintTop_toBottomOf="@id/budget" />
 
-    </LinearLayout>
+            <TextView
+                android:id="@+id/date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1970"
+                app:layout_constraintStart_toEndOf="@id/poster"
+                app:layout_constraintTop_toBottomOf="@id/revenue" />
+
+        </LinearLayout>
+
+    </ScrollView>
 
     <TextView
         android:id="@+id/description"
@@ -136,7 +144,8 @@
         android:layout_height="match_parent"
         android:background="@color/black"
         android:clickable="true"
-        android:focusable="true">
+        android:focusable="true"
+        tools:visibility="gone">
 
         <ProgressBar
             android:layout_width="wrap_content"

@@ -12,14 +12,14 @@
     <item
         android:id="@+id/favorites"
         android:icon="@android:drawable/ic_menu_myplaces"
-        android:orderInCategory="10"
+        android:orderInCategory="20"
         android:title="@string/favorites"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/contacts"
         android:icon="@android:drawable/ic_menu_call"
-        android:orderInCategory="10"
+        android:orderInCategory="30"
         android:title="@string/contacts"
         app:showAsAction="ifRoom" />
 

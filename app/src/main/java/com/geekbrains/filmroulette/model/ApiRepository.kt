@@ -44,4 +44,13 @@ class ApiRepository : IRepository {
         api.getFilmData(movieID, API_KEY_VALUE, language)
             .enqueue(callback)
     }
+
+    override fun getFilmCredits(movieID: Long, language: String, callback: Callback<Credits>) {
+        api.getFilmDetails(movieID, API_KEY_VALUE, language)
+            .enqueue(callback)
+    }
+
+    override fun getActorDetails(actorId: Long, language: String, callback: Callback<Person>) {
+        api.getActorDetails(actorId, API_KEY_VALUE, language).enqueue(callback)
+    }
 }

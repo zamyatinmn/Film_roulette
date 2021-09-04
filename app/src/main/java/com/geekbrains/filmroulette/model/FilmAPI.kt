@@ -44,4 +44,18 @@ interface FilmAPI {
         @Query(API_KEY_NAME) token:String,
         @Query(LANGUAGE_KEY) language: String,
     ) : Call<CurrentMovie>
+
+    @GET("$DETAILS_ENDPOINT{id}$CREDITS_ENDPOINT")
+    fun getFilmDetails(
+        @Path("id") movieId: Long,
+        @Query(API_KEY_NAME) token:String,
+        @Query(LANGUAGE_KEY) language: String,
+    ) : Call<Credits>
+
+    @GET("$PERSON_ENDPOINT{id}")
+    fun getActorDetails(
+        @Path("id") movieId: Long,
+        @Query(API_KEY_NAME) token:String,
+        @Query(LANGUAGE_KEY) language: String,
+    ) : Call<Person>
 }

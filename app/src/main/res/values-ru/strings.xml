@@ -24,4 +24,8 @@
     <string name="mobile">Мобильный</string>
     <string name="work">Рабочий</string>
     <string name="other">Другой</string>
+    <string name="map">Карта</string>
+    <string name="no_place_of_birth">у нас нет данных о месте рождения</string>
+    <string name="actors">Актеры:</string>
+    <string name="go">вперед</string>
 </resources>

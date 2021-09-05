@@ -27,12 +27,59 @@ android {
         it.buildConfigField "String", "API_KEY", apiKey
     }
 
+    signingConfigs{
+        qatest{
+            def propsFile = rootProject.file('keystoreQA.properties')
+            def props = new Properties()
+            props.load(new FileInputStream(propsFile))
+
+            storeFile = file(props['storeFile'])
+            storePassword = props['storePassword']
+            keyAlias = props['keyAlias']
+            keyPassword = props['keyPassword']
+        }
+        release{
+            def propsFile = rootProject.file('keystoreRelease.properties')
+            def props = new Properties()
+            props.load(new FileInputStream(propsFile))
+
+            storeFile = file(props['storeFile'])
+            storePassword = props['storePassword']
+            keyAlias = props['keyAlias']
+            keyPassword = props['keyPassword']
+        }
+    }
+
     buildTypes {
-        release {
+        debug {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+        qatest {
+            signingConfig signingConfigs.qatest
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        release {
+            signingConfig signingConfigs.release
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
     }
+
+    flavorDimensions 'version'
+
+    productFlavors{
+        mens{
+            dimension 'version'
+            versionNameSuffix '.mens'
+        }
+        girls{
+            dimension 'version'
+            versionNameSuffix '.girls'
+        }
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8

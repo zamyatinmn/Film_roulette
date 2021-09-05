@@ -9,4 +9,18 @@
     <color name="white">#FFFFFFFF</color>
     <color name="half_transparent">#80000000</color>
     <color name="red">#FFFE0000</color>
+
+    //girls
+    <color name="pink_200">#F48FB1</color>
+    <color name="pink_500">#E91E63</color>
+    <color name="pink_700">#C2185B</color>
+    <color name="deep_purple_200">#B39DDB</color>
+    <color name="deep_purple_700">#512DA8</color>
+
+    //mens
+    <color name="brown_200">#BCAAA4</color>
+    <color name="brown_500">#795548</color>
+    <color name="brown_700">#5D4037</color>
+    <color name="blue_grey_200">#B0BEC5</color>
+    <color name="blue_grey_700">#455A64</color>
 </resources>

@@ -6,6 +6,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.result.contract.ActivityResultContracts
@@ -18,6 +19,7 @@ import androidx.fragment.app.Fragment
 import com.geekbrains.filmroulette.PLACE_OF_BIRTH_KEY
 import com.geekbrains.filmroulette.R
 import com.geekbrains.filmroulette.databinding.ActivityMainBinding
+import com.google.firebase.messaging.FirebaseMessaging
 
 class MainActivity : AppCompatActivity() {
     private lateinit var ui: ActivityMainBinding
@@ -29,6 +31,17 @@ class MainActivity : AppCompatActivity() {
         changeScreen(MainFragment.newInstance())
         setBottomNavigation()
         setSupportActionBar(ui.toolbar)
+
+
+        logFBToken()
+    }
+
+    private fun logFBToken() {
+        FirebaseMessaging.getInstance().token.addOnCompleteListener {
+            if (it.isComplete) {
+                Log.d("mylogs", it.result.toString())
+            }
+        }
     }
 
     private val bundle = Bundle()
@@ -41,6 +54,8 @@ class MainActivity : AppCompatActivity() {
             showMap()
         }
     }
+
+
 
     private fun setBottomNavigation() {
         ui.bottomNavigation.setOnNavigationItemSelectedListener {

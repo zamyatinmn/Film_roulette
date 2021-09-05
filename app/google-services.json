@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "160319387927",
+    "project_id": "film-roulette-5edd9",
+    "storage_bucket": "film-roulette-5edd9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:160319387927:android:b6f83a820027b4cb35df52",
+        "android_client_info": {
+          "package_name": "com.geekbrains.filmroulette"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "160319387927-0v373j22aksfnvh3319852a7072cdpn8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBjWhcfDwCAqQ8LIugE23xPjOjpKKcFO6s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "160319387927-0v373j22aksfnvh3319852a7072cdpn8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

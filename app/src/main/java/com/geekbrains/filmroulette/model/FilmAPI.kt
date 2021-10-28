@@ -1,6 +1,7 @@
 package com.geekbrains.filmroulette.model
 
 import com.geekbrains.filmroulette.*
+import io.reactivex.rxjava3.core.Single
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -19,7 +20,7 @@ interface FilmAPI {
         @Query(SORT_KEY) sort: String,
         @Query(LANGUAGE_KEY) language: String,
         @Query(YEAR_KEY) year: String
-    ): Call<Results>
+    ): Single<Results>
 
     @GET(DISCOVER_ENDPOINT)
     fun getPopular(
@@ -27,7 +28,7 @@ interface FilmAPI {
         @Query(ADULT_KEY) adultFlag: Boolean,
         @Query(SORT_KEY) sort: String,
         @Query(LANGUAGE_KEY) language: String
-    ): Call<Results>
+    ): Single<Results>
 
     @GET(DISCOVER_ENDPOINT)
     fun getByGenre(
@@ -35,26 +36,26 @@ interface FilmAPI {
         @Query(ADULT_KEY) adultFlag: Boolean,
         @Query(LANGUAGE_KEY) language: String,
         @Query(GENRE_KEY) genreId: Int
-    ): Call<Results>
+    ): Single<Results>
 
     @GET("$DETAILS_ENDPOINT{id}")
     fun getFilmData(
         @Path("id") movieId: Long,
         @Query(API_KEY_NAME) token: String,
         @Query(LANGUAGE_KEY) language: String,
-    ): Call<CurrentMovie>
+    ): Single<CurrentMovie>
 
     @GET("$DETAILS_ENDPOINT{id}$CREDITS_ENDPOINT")
     fun getFilmDetails(
         @Path("id") movieId: Long,
         @Query(API_KEY_NAME) token: String,
         @Query(LANGUAGE_KEY) language: String,
-    ): Call<Credits>
+    ): Single<Credits>
 
     @GET("$PERSON_ENDPOINT{id}")
     fun getActorDetails(
         @Path("id") movieId: Long,
         @Query(API_KEY_NAME) token: String,
         @Query(LANGUAGE_KEY) language: String,
-    ): Call<Person>
+    ): Single<Person>
 }

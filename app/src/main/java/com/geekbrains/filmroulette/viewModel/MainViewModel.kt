@@ -1,20 +1,61 @@
 package com.geekbrains.filmroulette.viewModel
 
+import androidx.lifecycle.LiveDataReactiveStreams
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.geekbrains.filmroulette.App
 import com.geekbrains.filmroulette.model.*
+import io.reactivex.rxjava3.core.BackpressureStrategy
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.subjects.BehaviorSubject
+import io.reactivex.rxjava3.subjects.PublishSubject
+import io.reactivex.rxjava3.subjects.ReplaySubject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class MainViewModel(
-    private val liveDataObserver: MutableLiveData<AppState> = MutableLiveData(),
     private val repository: IRepository = ApiRepository(),
     private val favoritesRepository: ILocalRepository = LocalRepository(App.getDao())
 ) : ViewModel() {
 
     private var favoritesFilms = mutableListOf<MovieResult>()
+
+    private val subjectLoading = BehaviorSubject.create<Unit>()
+    private val subjectRequest = BehaviorSubject.create<String>()
+
+    private val observableResponse = subjectRequest
+        .doOnNext { subjectLoading.onNext(Unit) }
+        .flatMap { language ->
+            Observable.merge(
+                listOf(
+                    repository.getDataNovelty(language).map { response ->
+                        deleteFavoritesFromServerResponse(response)
+                        AppState.SuccessNovelty(response.results)
+                    }.toObservable(),
+                    repository.getDataPopular(language).map { response ->
+                        deleteFavoritesFromServerResponse(response)
+                        AppState.SuccessPopular(response.results)
+                    }.toObservable(),
+                    repository.getDataThriller(language).map { response ->
+                        deleteFavoritesFromServerResponse(response)
+                        AppState.SuccessThriller(response.results)
+                    }.toObservable(),
+                    repository.getDataComedy(language).map { response ->
+                        deleteFavoritesFromServerResponse(response)
+                        AppState.SuccessComedy(response.results)
+                    }.toObservable()
+                )
+            )
+        }
+
+    private val screenState = Observable.merge(listOf(
+        subjectLoading.map { AppState.Loading },
+        observableResponse.doOnError { AppState.ServerError(it) }
+    ))
+
+    private val liveDataObserver =
+        LiveDataReactiveStreams.fromPublisher(screenState.toFlowable(BackpressureStrategy.LATEST))
 
     fun getLiveData() = liveDataObserver
 
@@ -27,32 +68,12 @@ class MainViewModel(
     }
 
     fun getFilmData(language: String) {
-        liveDataObserver.postValue(AppState.Loading)
+        subjectRequest.onNext(language)
         favoritesRepository.getAllFavorites(object : CallbackDB {
             override fun onResponse(result: MutableList<MovieResult>) {
                 favoritesFilms = result
             }
         })
-        repository.getDataNovelty(language, callbackNovelty)
-        repository.getDataPopular(language, callbackPopular)
-        repository.getDataThriller(language, callbackThriller)
-        repository.getDataComedy(language, callbackComedy)
-    }
-
-    private val callbackNovelty = object : Callback<Results> {
-        override fun onResponse(call: Call<Results>, response: Response<Results>) {
-            val serverResponse: Results? = response.body()
-            if (response.isSuccessful && serverResponse != null) {
-                deleteFavoritesFromServerResponse(serverResponse)
-                liveDataObserver.value = AppState.SuccessNovelty(serverResponse.results)
-            } else {
-                liveDataObserver.postValue(AppState.ServerError(Throwable("что-то не так..")))
-            }
-        }
-
-        override fun onFailure(call: Call<Results>, t: Throwable) {
-            liveDataObserver.postValue(AppState.ServerError(t))
-        }
     }
 
     private fun deleteFavoritesFromServerResponse(serverResponse: Results) {
@@ -66,64 +87,6 @@ class MainViewModel(
         }
         for (film in temp) {
             serverResponse.results.remove(film)
-        }
-    }
-
-    private fun markFavoritesInServerResponse(serverResponse: Results) {
-        for (favoriteFilm in favoritesFilms) {
-            for (serverFilm in serverResponse.results) {
-                if (favoriteFilm.id == serverFilm.id) {
-                    serverFilm.like = true
-                }
-            }
-        }
-    }
-
-    private val callbackPopular = object : Callback<Results> {
-        override fun onResponse(call: Call<Results>, response: Response<Results>) {
-            val serverResponse: Results? = response.body()
-            if (response.isSuccessful && serverResponse != null) {
-                deleteFavoritesFromServerResponse(serverResponse)
-                liveDataObserver.value = AppState.SuccessPopular(serverResponse.results)
-            } else {
-                liveDataObserver.postValue(AppState.ServerError(Throwable("что-то не так..")))
-            }
-        }
-
-        override fun onFailure(call: Call<Results>, t: Throwable) {
-            liveDataObserver.postValue(AppState.ServerError(t))
-        }
-    }
-
-    private val callbackThriller = object : Callback<Results> {
-        override fun onResponse(call: Call<Results>, response: Response<Results>) {
-            val serverResponse: Results? = response.body()
-            if (response.isSuccessful && serverResponse != null) {
-                deleteFavoritesFromServerResponse(serverResponse)
-                liveDataObserver.value = AppState.SuccessThriller(serverResponse.results)
-            } else {
-                liveDataObserver.postValue(AppState.ServerError(Throwable("что-то не так..")))
-            }
-        }
-
-        override fun onFailure(call: Call<Results>, t: Throwable) {
-            liveDataObserver.postValue(AppState.ServerError(t))
-        }
-    }
-
-    private val callbackComedy = object : Callback<Results> {
-        override fun onResponse(call: Call<Results>, response: Response<Results>) {
-            val serverResponse: Results? = response.body()
-            if (response.isSuccessful && serverResponse != null) {
-                deleteFavoritesFromServerResponse(serverResponse)
-                liveDataObserver.value = AppState.SuccessComedy(serverResponse.results)
-            } else {
-                liveDataObserver.postValue(AppState.ServerError(Throwable("что-то не так..")))
-            }
-        }
-
-        override fun onFailure(call: Call<Results>, t: Throwable) {
-            liveDataObserver.postValue(AppState.ServerError(t))
         }
     }
 }

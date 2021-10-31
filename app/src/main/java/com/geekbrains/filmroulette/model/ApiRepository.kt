@@ -2,8 +2,9 @@ package com.geekbrains.filmroulette.model
 
 import com.geekbrains.filmroulette.*
 import com.google.gson.GsonBuilder
-import retrofit2.Callback
+import io.reactivex.rxjava3.core.Single
 import retrofit2.Retrofit
+import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.*
 
@@ -14,49 +15,46 @@ import java.util.*
 
 class ApiRepository : IRepository {
 
+    val adapter = RxJava3CallAdapterFactory.create()
+
     private val api = Retrofit.Builder()
         .baseUrl(IMDB_URL)
+        .addCallAdapterFactory(adapter)
         .addConverterFactory(GsonConverterFactory.create(GsonBuilder().setLenient().create()))
         .build().create(FilmAPI::class.java)
 
-    override fun getDataNovelty(language: String, callback: Callback<Results>) {
+    override fun getDataNovelty(language: String) : Single<Results> {
         val currentYear = Calendar.getInstance().get(Calendar.YEAR)
-        api.getNovelty(
+        return api.getNovelty(
             API_KEY_VALUE,
             App.isAdultMode,
             SORT_BY_RELEASE_DATE,
             language,
             "$currentYear"
         )
-            .enqueue(callback)
     }
 
-    override fun getDataPopular(language: String, callback: Callback<Results>) {
-        api.getPopular(API_KEY_VALUE, App.isAdultMode, SORT_BY_POPULARITY, language)
-            .enqueue(callback)
+    override fun getDataPopular(language: String): Single<Results> {
+        return api.getPopular(API_KEY_VALUE, App.isAdultMode, SORT_BY_POPULARITY, language)
     }
 
-    override fun getDataThriller(language: String, callback: Callback<Results>) {
-        api.getByGenre(API_KEY_VALUE, App.isAdultMode, language, GENRE_THRILLER)
-            .enqueue(callback)
+    override fun getDataThriller(language: String): Single<Results> {
+        return api.getByGenre(API_KEY_VALUE, App.isAdultMode, language, GENRE_THRILLER)
     }
 
-    override fun getDataComedy(language: String, callback: Callback<Results>) {
-        api.getByGenre(API_KEY_VALUE, App.isAdultMode, language, GENRE_COMEDY)
-            .enqueue(callback)
+    override fun getDataComedy(language: String): Single<Results> {
+        return api.getByGenre(API_KEY_VALUE, App.isAdultMode, language, GENRE_COMEDY)
     }
 
-    override fun getDataFilm(movieID: Long, language: String, callback: Callback<CurrentMovie>) {
-        api.getFilmData(movieID, API_KEY_VALUE, language)
-            .enqueue(callback)
+    override fun getDataFilm(movieID: Long, language: String): Single<CurrentMovie> {
+       return api.getFilmData(movieID, API_KEY_VALUE, language)
     }
 
-    override fun getFilmCredits(movieID: Long, language: String, callback: Callback<Credits>) {
-        api.getFilmDetails(movieID, API_KEY_VALUE, language)
-            .enqueue(callback)
+    override fun getFilmCredits(movieID: Long, language: String): Single<Credits> {
+       return api.getFilmDetails(movieID, API_KEY_VALUE, language)
     }
 
-    override fun getActorDetails(actorId: Long, language: String, callback: Callback<Person>) {
-        api.getActorDetails(actorId, API_KEY_VALUE, language).enqueue(callback)
+    override fun getActorDetails(actorId: Long, language: String): Single<Person> {
+        return api.getActorDetails(actorId, API_KEY_VALUE, language)
     }
 }

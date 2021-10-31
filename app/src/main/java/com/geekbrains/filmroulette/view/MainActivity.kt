@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.PermissionChecker
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LiveDataReactiveStreams
 import com.geekbrains.filmroulette.PLACE_OF_BIRTH_KEY
 import com.geekbrains.filmroulette.R
 import com.geekbrains.filmroulette.databinding.ActivityMainBinding
@@ -31,7 +32,6 @@ class MainActivity : AppCompatActivity() {
         changeScreen(MainFragment.newInstance())
         setBottomNavigation()
         setSupportActionBar(ui.toolbar)
-
 
         logFBToken()
     }

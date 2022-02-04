@@ -15,24 +15,6 @@ import java.util.stream.Collectors
 
 class ListConverter {
     companion object {
-//        var gson = Gson()
-//
-//        @TypeConverter
-//        @JvmStatic
-//        fun fromTimestamp(data: String?): List<Long>? {
-//            if (data == null) {
-//                return Collections.emptyList()
-//            }
-//
-//            val listType = object : TypeToken<List<String>>() {}.type
-//            return gson.fromJson(data, listType)
-//        }
-//
-//        @TypeConverter
-//        @JvmStatic
-//        fun someObjectListToString(someObjects: List<Long>?): String? {
-//            return gson.toJson(someObjects)
-//        }
 
         @JvmStatic
         @TypeConverter

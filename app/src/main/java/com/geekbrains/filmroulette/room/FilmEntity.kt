@@ -2,9 +2,6 @@ package com.geekbrains.filmroulette.room
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import androidx.room.TypeConverters
-import com.geekbrains.filmroulette.ListConverter
-import com.google.gson.annotations.SerializedName
 
 
 /**
@@ -29,5 +26,5 @@ data class FilmEntity(
     val video: Boolean,
     val vote_average: Double,
     val vote_count: Long,
-    var like: Boolean
+    var like: Boolean,
 )

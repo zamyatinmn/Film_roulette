@@ -29,3 +29,5 @@ operator fun View.unaryMinus(){
     if (this.visibility == View.VISIBLE) this.visibility = View.INVISIBLE
     if (this.visibility == View.INVISIBLE) this.visibility = View.GONE
 }
+
+//тест
